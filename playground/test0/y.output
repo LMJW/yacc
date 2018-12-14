@@ -1,0 +1,124 @@
+
+state 0
+	$accept: .list $end 
+	list: .    (1)
+
+	.  reduce 1 (src line 26)
+
+	list  goto 1
+
+state 1
+	$accept:  list.$end 
+	list:  list.stat '\n' 
+
+	$end  accept
+	DIGIT  shift 6
+	LETTER  shift 4
+	.  error
+
+	expr  goto 3
+	number  goto 5
+	stat  goto 2
+
+state 2
+	list:  list stat.'\n' 
+
+	'\n'  shift 7
+	.  error
+
+
+state 3
+	stat:  expr.    (3)
+	expr:  expr.'+' expr 
+
+	'+'  shift 8
+	.  reduce 3 (src line 29)
+
+
+state 4
+	stat:  LETTER.'=' expr 
+	expr:  LETTER.    (7)
+
+	'='  shift 9
+	.  reduce 7 (src line 42)
+
+
+state 5
+	expr:  number.    (5)
+	number:  number.DIGIT 
+
+	DIGIT  shift 10
+	.  reduce 5 (src line 40)
+
+
+state 6
+	number:  DIGIT.    (8)
+
+	.  reduce 8 (src line 45)
+
+
+state 7
+	list:  list stat '\n'.    (2)
+
+	.  reduce 2 (src line 27)
+
+
+state 8
+	expr:  expr '+'.expr 
+
+	DIGIT  shift 6
+	LETTER  shift 12
+	.  error
+
+	expr  goto 11
+	number  goto 5
+
+state 9
+	stat:  LETTER '='.expr 
+
+	DIGIT  shift 6
+	LETTER  shift 12
+	.  error
+
+	expr  goto 13
+	number  goto 5
+
+state 10
+	number:  number DIGIT.    (9)
+
+	.  reduce 9 (src line 49)
+
+
+state 11
+	expr:  expr.'+' expr 
+	expr:  expr '+' expr.    (6)
+
+	.  reduce 6 (src line 41)
+
+
+state 12
+	expr:  LETTER.    (7)
+
+	.  reduce 7 (src line 42)
+
+
+state 13
+	stat:  LETTER '=' expr.    (4)
+	expr:  expr.'+' expr 
+
+	'+'  shift 8
+	.  reduce 4 (src line 33)
+
+
+8 terminals, 5 nonterminals
+10 grammar rules, 14/8000 states
+0 shift/reduce, 0 reduce/reduce conflicts reported
+54 working sets used
+memory: parser 8/120000
+0 extra closures
+11 shift entries, 1 exceptions
+6 goto entries
+2 entries saved by goto default
+Optimizer space used: output 14/120000
+14 table entries, 0 zero
+maximum spread: 8, maximum offset: 9

@@ -1,0 +1,69 @@
+
+state 0
+	$accept: .begin $end 
+
+	DING  shift 4
+	.  error
+
+	begin  goto 1
+	rhyme  goto 2
+	sound  goto 3
+
+state 1
+	$accept:  begin.$end 
+
+	$end  accept
+	.  error
+
+
+state 2
+	begin:  rhyme.    (1)
+
+	.  reduce 1 (src line 22)
+
+
+state 3
+	rhyme:  sound.place 
+
+	DELL  shift 6
+	.  error
+
+	place  goto 5
+
+state 4
+	sound:  DING.DONG 
+
+	DONG  shift 7
+	.  error
+
+
+state 5
+	rhyme:  sound place.    (2)
+
+	.  reduce 2 (src line 27)
+
+
+state 6
+	place:  DELL.    (4)
+
+	.  reduce 4 (src line 37)
+
+
+state 7
+	sound:  DING DONG.    (3)
+
+	.  reduce 3 (src line 32)
+
+
+6 terminals, 5 nonterminals
+5 grammar rules, 8/8000 states
+0 shift/reduce, 0 reduce/reduce conflicts reported
+54 working sets used
+memory: parser 3/120000
+0 extra closures
+3 shift entries, 1 exceptions
+4 goto entries
+0 entries saved by goto default
+Optimizer space used: output 7/120000
+7 table entries, 0 zero
+maximum spread: 6, maximum offset: 6

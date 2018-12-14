@@ -1,0 +1,72 @@
+package main
+
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+)
+
+type Indicator interface {
+	getIPs()
+}
+
+var rules = make(map[string]func(Indicator))
+
+type RuleLex struct {
+	cmd []string
+	pos int
+}
+
+// func (l *RuleLex) Lex(lv *RuleSymType) int {
+// 	var c string
+
+// }
+
+func (l *RuleLex) Error(s string) {
+	fmt.Printf("Syntax error: %s \n", s)
+}
+
+func main() {
+	fi := bufio.NewReader(os.NewFile(0, "stdin"))
+
+	for {
+		fmt.Printf("expression: ")
+		if eqn, ok := readline(fi); ok {
+			tt := strings.Split(eqn, " ")
+			_ = &RuleLex{cmd: tt}
+		} else {
+			break
+		}
+	}
+}
+
+func readline(fi *bufio.Reader) (string, bool) {
+	s, err := fi.ReadString('\n')
+	if err != nil {
+		return "", false
+	}
+	return s, true
+}
+
+func tokenize(s string) []string {
+	var res []string
+	var buf []rune
+	// var c rune = ' '
+	for _, c := range s {
+		switch c {
+		case '.', '=':
+			res = append(res, string(buf))
+			res = append(res, string(c))
+			buf = []rune{}
+		case ' ', '\n':
+			if len(buf) > 0 {
+				res = append(res, string(buf))
+			}
+			buf = []rune{}
+		default:
+			buf = append(buf, c)
+		}
+	}
+	return res
+}
